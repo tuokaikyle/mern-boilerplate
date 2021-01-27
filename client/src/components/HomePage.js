@@ -39,7 +39,6 @@ const HomePage = () => {
   };
   useEffect(() => {
     getTomatoes();
-    console.log('one render');
   }, [state]);
   return (
     <div>
