@@ -1,5 +1,5 @@
-import mongoose from 'mongoose'
-import Timer from '../utils/timer.js'
+import mongoose from 'mongoose';
+import Timer from '../utils/timer.js';
 
 const connectDB = async () => {
   try {
@@ -7,13 +7,14 @@ const connectDB = async () => {
       useUnifiedTopology: true,
       useNewUrlParser: true,
       useCreateIndex: true,
-    })
+      useFindAndModify: false,
+    });
 
-    console.log(`MongoDB Connected: ${Timer()}`.cyan.underline)
+    console.log(`MongoDB Connected: ${Timer()}`.cyan.underline);
   } catch (error) {
-    console.error(`Error: ${error.message}`.red.underline.bold)
-    process.exit(1)
+    console.error(`Error: ${error.message}`.red.underline.bold);
+    process.exit(1);
   }
-}
+};
 
-export default connectDB
+export default connectDB;

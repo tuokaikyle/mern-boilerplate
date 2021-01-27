@@ -39,6 +39,29 @@ app.post('/addtomato', async (req, res) => {
     throw new Error('Not created');
   }
 });
+app.delete('/deletetomato', async (req, res) => {
+  const { _id } = req.body;
+  const one = await Tomato.deleteOne({ _id });
+
+  if (one) {
+    res.status(201).json({ message: 'Deleted' });
+  } else {
+    res.status(400);
+    throw new Error('Not Deleted');
+  }
+});
+
+app.put('/updatetomato', async (req, res) => {
+  const { _id, item } = req.body;
+  const one = await Tomato.findOneAndUpdate({ _id }, { item });
+
+  if (one) {
+    res.status(201).json({ message: 'Deleted' });
+  } else {
+    res.status(400);
+    throw new Error('Not Deleted');
+  }
+});
 
 const PORT = process.env.PORT || 5000;
 

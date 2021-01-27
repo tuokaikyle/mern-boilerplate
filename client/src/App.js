@@ -1,64 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { createContext, useReducer } from 'react';
 import './App.css';
-import { set } from 'mongoose';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import UpdatePage from './components/UpdatePage';
+import HomePage from './components/HomePage';
+import { reducer, initialState } from './reducers/updateReducer';
+export const GeneralContext = createContext();
+
+const Routing = () => {
+  return (
+    <Switch>
+      <Route path='/update'>
+        <UpdatePage />
+      </Route>
+      <Route path='/' exact>
+        <HomePage />
+      </Route>
+    </Switch>
+  );
+};
 
 function App() {
-  const [item, setItem] = useState('');
-  const [done, setDone] = useState(false);
-  const [allTomatoes, setAllTomatoes] = useState('');
-
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    try {
-      const result = await (
-        await fetch('/addtomato', {
-          method: 'post',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ item }),
-        })
-      ).json();
-      setItem('');
-      console.log(result.message);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const getTomatoes = async () => {
-    try {
-      const result = await (
-        await fetch('/all', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-      ).json();
-      setAllTomatoes(result);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    getTomatoes();
-  }, [submitHandler]);
-
+  const [state, dispatch] = useReducer(reducer, initialState);
   return (
-    <div className='App'>
-      <h1>Hello World</h1>
-      <form onSubmit={submitHandler}>
-        <input
-          type='text'
-          value={item}
-          onChange={(e) => {
-            setItem(e.target.value);
-          }}
-        />
-        <button type='submit'>Submit</button>
-      </form>
-      {allTomatoes &&
-        allTomatoes.map((i, key) => <div key={key}>{i.item}</div>)}
+    <div className='App' style={{ width: '800px', marginInline: 'auto' }}>
+      <GeneralContext.Provider value={{ state, dispatch }}>
+        <BrowserRouter>
+          <Routing></Routing>
+        </BrowserRouter>
+      </GeneralContext.Provider>
     </div>
   );
 }
